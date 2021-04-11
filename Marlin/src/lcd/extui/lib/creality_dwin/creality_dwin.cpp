@@ -39,6 +39,7 @@
 #include "../../module/planner.h"
 #include "../../module/settings.h"
 #include "../../libs/buzzer.h"
+#include "../../gcode/gcode.h"
 
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #include "../../feature/pause.h"

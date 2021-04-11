@@ -659,9 +659,9 @@
 #endif
 
 #if ANY(DWIN_CREALITY_LCD, CREALITY_DWIN_EXTUI)
-  #define SERIAL_CATCHALL 0
+  //#define SERIAL_CATCHALL 0
   #ifndef LCD_SERIAL_PORT
-    #define LCD_SERIAL_PORT 3 // Creality 4.x board
+    #define LCD_SERIAL_PORT 1 // Creality 4.x board
   #endif
 #endif
 
