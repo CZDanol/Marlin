@@ -668,13 +668,6 @@
   #define UNUSED_E(E) UNUSED(E)
 #endif
 
-#if ENABLED(CREALITY_DWIN_EXTUI)
-  //#define SERIAL_CATCHALL 0
-  #ifndef LCD_SERIAL_PORT
-    #define LCD_SERIAL_PORT 1 // Creality 4.x board
-  #endif
-#endif
-
 /**
  * The BLTouch Probe emulates a servo probe
  * and uses "special" angles for its state.
@@ -983,9 +976,9 @@
 
 #if ENABLED(DWIN_CREALITY_LCD)
   #define HAS_DISPLAY 1
-  #define SERIAL_CATCHALL 0
+  //#define SERIAL_CATCHALL 0
   #ifndef LCD_SERIAL_PORT
-    #define LCD_SERIAL_PORT 3 // Creality 4.x board
+    #define LCD_SERIAL_PORT 1
   #endif
 #endif
 
