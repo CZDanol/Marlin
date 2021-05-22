@@ -1,4 +1,4 @@
-# Marlin for E3V2
+# Marlin for E3V2 + SKR Mini
 This is a Marlin firmware for the following printer setup:
 * Ender 3 V2
 * Original E3V2 display
