@@ -223,6 +223,10 @@ millis_t MarlinUI::next_button_update_ms; // = 0
 
 #endif
 
+#if EITHER(HAS_LCD_MENU, EXTENSIBLE_UI)
+  bool MarlinUI::lcd_clicked;
+#endif
+
 #if HAS_LCD_MENU
   #include "menu/menu.h"
 
@@ -246,14 +250,6 @@ millis_t MarlinUI::next_button_update_ms; // = 0
     uint8_t MarlinUI::touch_buttons;
     uint8_t MarlinUI::repeat_delay;
   #endif
-
-  bool MarlinUI::lcd_clicked;
-
-  bool MarlinUI::use_click() {
-    const bool click = lcd_clicked;
-    lcd_clicked = false;
-    return click;
-  }
 
   #if EITHER(AUTO_BED_LEVELING_UBL, G26_MESH_VALIDATION)
 
@@ -1498,6 +1494,13 @@ void MarlinUI::update() {
     TERN_(HAS_LCD_MENU, return_to_status());
   }
 
+  #if BOTH(PSU_CONTROL, PS_OFF_CONFIRM)
+    void MarlinUI::poweroff() {
+      queue.inject_P(PSTR("M81"));
+      goto_previous_screen();
+    }
+  #endif
+
   void MarlinUI::flow_fault() {
     LCD_ALERTMESSAGEPGM(MSG_FLOWMETER_FAULT);
     TERN_(HAS_BUZZER, buzz(1000, 440));
@@ -1613,8 +1616,9 @@ void MarlinUI::update() {
 
     if (status) {
       if (old_status < 2) {
-        TERN_(EXTENSIBLE_UI, ExtUI::onMediaInserted()); // ExtUI response
-        #if ENABLED(BROWSE_MEDIA_ON_INSERT)
+        #if ENABLED(EXTENSIBLE_UI)
+          ExtUI::onMediaInserted();
+        #elif ENABLED(BROWSE_MEDIA_ON_INSERT)
           clear_menu_history();
           quick_feedback();
           goto_screen(MEDIA_MENU_GATEWAY);
@@ -1625,8 +1629,9 @@ void MarlinUI::update() {
     }
     else {
       if (old_status < 2) {
-        TERN_(EXTENSIBLE_UI, ExtUI::onMediaRemoved()); // ExtUI response
-        #if PIN_EXISTS(SD_DETECT)
+        #if ENABLED(EXTENSIBLE_UI)
+          ExtUI::onMediaRemoved();
+        #elif PIN_EXISTS(SD_DETECT)
           LCD_MESSAGEPGM(MSG_MEDIA_REMOVED);
           #if HAS_LCD_MENU
             if (!defer_return_to_status) return_to_status();
