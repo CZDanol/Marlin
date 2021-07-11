@@ -63,11 +63,25 @@ void MarlinUI::set_brightness(const uint8_t value) {
       case PAUSE_MESSAGE_HEAT:
         CrealityDWIN.Confirm_Handler(HeaterTime);
         break;
+      case PAUSE_MESSAGE_WAITING:
+        CrealityDWIN.Draw_Print_Screen();
+        break;
       default:
         break;
     }
   }
 #endif
+
+bool MarlinUI::get_blink() {
+  static uint8_t blink = 0;
+  static millis_t next_blink_ms = 0;
+  millis_t ms = millis();
+  if (ELAPSED(ms, next_blink_ms)) {
+    blink ^= 0xFF;
+    next_blink_ms = ms + 1000 - 250;
+  }
+  return blink != 0;
+}
 
 void MarlinUI::update() {
   CrealityDWIN.Update();
